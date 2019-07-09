@@ -67,12 +67,25 @@ dateFormatter.timeStyle = .short
 //: d. Make one of the flights have a `nil` terminal because it has not been decided yet.
 //:
 //: e. Stretch: Look at the API for [`DateComponents`](https://developer.apple.com/documentation/foundation/datecomponents?language=objc) for creating a specific time
+func flightTimes(month: Int, day: Int, timeZone: String, hour: Int, minute: Int) -> Date {
+    var dateComponents = DateComponents()
+    dateComponents.year = 1980
+    dateComponents.month = month
+    dateComponents.day = day
+    dateComponents.timeZone = TimeZone(abbreviation: timeZone)
+    dateComponents.hour = hour
+    dateComponents.minute = minute
+    let userCalendar = Calendar.current
+    guard let newDate = userCalendar.date(from: dateComponents) else {return Date()}
+    return newDate
+}
+
 let rivesAirPark = Airport(name: "Rives Air Park", city: "Royse City, TX")
 let rivesDepartureBoard = DepartureBoard(currentAirport: rivesAirPark)
 
-var flight1 = Flight(destination: Airport(name: "Dallas Love Field", city: "Dallas, TX"), airline: "American Airlines", flightNumber: "AA 5576", departureTime: Date(), terminal: "B34", flightStatus: .enRoute)
+var flight1 = Flight(destination: Airport(name: "Dallas Love Field", city: "Dallas, TX"), airline: "American Airlines", flightNumber: "AA 5576", departureTime: flightTimes(month: 7, day: 9, timeZone: "CST", hour: 22, minute: 45), terminal: "B34", flightStatus: .enRoute)
 
-var flight2 = Flight(destination: Airport(name: "Seattle-Tacoma International Airport", city: "Seattle, WA"), airline: "Delta Airlines", flightNumber: "D 2236", departureTime: Date(), terminal: nil, flightStatus: .delayed)
+var flight2 = Flight(destination: Airport(name: "Seattle-Tacoma International Airport", city: "Seattle, WA"), airline: "Delta Airlines", flightNumber: "D 2236", departureTime: flightTimes(month: 7, day: 9, timeZone: "CST", hour: 7, minute: 00), terminal: nil, flightStatus: .delayed)
 var flight3 = Flight(destination: Airport(name: "LaGuardia Airport", city: "New York, NY"), airline: "Virgin Airlines", flightNumber: "VI 9954", departureTime: nil, terminal: nil, flightStatus: .canceled)
 
 rivesDepartureBoard.addFlight(flight: flight1)
